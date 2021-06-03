@@ -4,7 +4,6 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
 
 
 <url>
@@ -15,18 +14,32 @@
 <url>
   <loc>https://toolxd.com/tools/Super_Script_Generator/Super_Script.html</loc>
   <lastmod>2021-06-03T09:59:46+00:00</lastmod>
-  <priority>0.80</priority>
+  <priority>1.00</priority>
 </url>
 <url>
   <loc>https://toolxd.com/tools/Sub_Script_Generator/Sub_Script.html</loc>
   <lastmod>2021-06-03T09:59:46+00:00</lastmod>
-  <priority>0.80</priority>
+  <priority>1.00</priority>
 </url>
 <url>
   <loc>https://toolxd.com/Pages/Contect-Form.html</loc>
   <lastmod>2021-06-03T09:59:46+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://toolxd.com/Pages/Privacy-Policy.html</loc>
+  <lastmod>2021-06-03T09:59:46+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://toolxd.com/Pages/Cookie-Policy.html</loc>
+  <lastmod>2021-06-03T09:59:46+00:00</lastmod>
   <priority>0.64</priority>
 </url>
-
+<url>
+  <loc>https://toolxd.com/Pages/Terms-Of-Use.html</loc>
+  <lastmod>2021-06-03T09:59:46+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
 
 </urlset>

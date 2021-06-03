@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.toolxd.super",
+    "sha256_cert_fingerprints":
+    ["3B:A1:D2:F1:4D:1D:6B:33:2B:A0:7D:82:23:A1:73:6F:AF:91:43:3B:46:E7:FB:07:B8:33:23:FF:36:22:43:11"]
+  }
+}]

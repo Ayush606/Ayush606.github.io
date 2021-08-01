@@ -3,6 +3,4 @@ if ( window.self !== window.top)
       {
             document.getElementById("footer").innerHTML='<a href="https://toolxd.com" target="_blank"> <footer> <hr> <p>Some Tools Will Not Work Here So We\'ll Redirect You To  Toolxd.com</p> <hr> <footer> </a>';
       } 
-else {
-console.log("good");
-}
+

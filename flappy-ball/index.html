@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script
+			async
+			src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1525045383348447"
+			crossorigin="anonymous"
+		></script>
+		<title>Flappy Bird Clone</title>
+		<style>
+			body {
+				margin: 0;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+				background-color: #70c5ce;
+			}
+			.ad-horizontal {
+				width: 400px;
+				height: 50px;
+				background-color: #ccc;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-weight: bold;
+			}
+			.ad-vertical {
+				width: 50px;
+				height: 600px;
+				background-color: #ccc;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-weight: bold;
+			}
+			#gameWrapper {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+			#gameArea {
+				display: flex;
+				align-items: center;
+			}
+			canvas {
+				border: 2px solid #000;
+				background-color: #fff;
+			}
+			#restartBtn {
+				margin-top: 10px;
+				padding: 10px 20px;
+				font-size: 16px;
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="gameArea">
+			<div class="ad-vertical">
+				<script
+					async
+					src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1525045383348447"
+					crossorigin="anonymous"
+				></script>
+				<!-- vertical -->
+				<ins
+					class="adsbygoogle"
+					style="display: block"
+					data-ad-client="ca-pub-1525045383348447"
+					data-ad-slot="2023856045"
+					data-ad-format="auto"
+					data-full-width-responsive="true"
+				></ins>
+				<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+				</script>
+			</div>
+			<div id="gameWrapper">
+				<div class="ad-horizontal">
+					<script
+						async
+						src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1525045383348447"
+						crossorigin="anonymous"
+					></script>
+					<!-- tools-hori -->
+					<ins
+						class="adsbygoogle"
+						style="display: block"
+						data-ad-client="ca-pub-1525045383348447"
+						data-ad-slot="5865173724"
+						data-ad-format="auto"
+						data-full-width-responsive="true"
+					></ins>
+					<script>
+						(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
+				</div>
+				<canvas id="gameCanvas" width="400" height="600"></canvas>
+				<div class="ad-horizontal">
+					<script
+						async
+						src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1525045383348447"
+						crossorigin="anonymous"
+					></script>
+					<!-- tools-hori -->
+					<ins
+						class="adsbygoogle"
+						style="display: block"
+						data-ad-client="ca-pub-1525045383348447"
+						data-ad-slot="5865173724"
+						data-ad-format="auto"
+						data-full-width-responsive="true"
+					></ins>
+					<script>
+						(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
+				</div>
+				<button id="restartBtn">Restart</button>
+			</div>
+			<div class="ad-vertical">
+				<script
+					async
+					src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1525045383348447"
+					crossorigin="anonymous"
+				></script>
+				<!-- vertical -->
+				<ins
+					class="adsbygoogle"
+					style="display: block"
+					data-ad-client="ca-pub-1525045383348447"
+					data-ad-slot="2023856045"
+					data-ad-format="auto"
+					data-full-width-responsive="true"
+				></ins>
+				<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+				</script>
+			</div>
+		</div>
+
+		<script>
+			const canvas = document.getElementById("gameCanvas");
+			const ctx = canvas.getContext("2d");
+			const restartBtn = document.getElementById("restartBtn");
+
+			// Game variables
+			const gravity = 0.6;
+			const lift = -10;
+			const pipeWidth = 60;
+			const baseGap = 150;
+			const minGap = 60;
+			const spawnInterval = 90; // frames between pipes
+			const maxScore = 10; // impossible to reach this score
+			const marginX = 20; // margin for score display
+			const marginY = 20;
+			const padding = 10; // padding around score box
+
+			let frameCount = 0;
+			let pipes = [];
+			let score = 0;
+			let gameOver = false;
+			let gameStarted = false;
+
+			// Bird object
+			const bird = {
+				x: 80,
+				y: canvas.height / 2,
+				radius: 20,
+				velocity: 0,
+				draw() {
+					ctx.beginPath();
+					ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+					ctx.fillStyle = "#ff0";
+					ctx.fill();
+					ctx.stroke();
+				},
+				update() {
+					this.velocity += gravity;
+					this.y += this.velocity;
+					// Hit the ground
+					if (this.y + this.radius > canvas.height) {
+						this.y = canvas.height - this.radius;
+						this.velocity = 0;
+						gameOver = true;
+					}
+					// Hit the top
+					if (this.y - this.radius < 0) {
+						this.y = this.radius;
+						this.velocity = 0;
+					}
+				},
+				flap() {
+					this.velocity = lift;
+				},
+			};
+
+			// Pipe constructor with dynamic gap and speed
+			function Pipe(gap, speed) {
+				this.gap = gap;
+				this.speed = speed;
+				this.x = canvas.width;
+				this.top = Math.random() * (canvas.height - this.gap - 100) + 50;
+				this.bottom = canvas.height - this.top - this.gap;
+				this.scored = false;
+
+				this.draw = function () {
+					ctx.fillStyle = "#0f0";
+					// top pipe
+					ctx.fillRect(this.x, 0, pipeWidth, this.top);
+					// bottom pipe
+					ctx.fillRect(
+						this.x,
+						canvas.height - this.bottom,
+						pipeWidth,
+						this.bottom
+					);
+				};
+
+				this.update = function () {
+					this.x -= this.speed;
+
+					// Check for scoring: only increment if the next score would remain below maxScore
+					if (!this.scored && this.x + pipeWidth < bird.x) {
+						if (score + 1 < maxScore) {
+							score++;
+						}
+						this.scored = true;
+					}
+
+					// Collision detection
+					if (
+						bird.x + bird.radius > this.x &&
+						bird.x - bird.radius < this.x + pipeWidth &&
+						(bird.y - bird.radius < this.top ||
+							bird.y + bird.radius > canvas.height - this.bottom)
+					) {
+						gameOver = true;
+					}
+				};
+			}
+
+			// Draw start screen
+			function drawStartScreen() {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				ctx.fillStyle = "#000";
+				ctx.font = "32px sans-serif";
+				ctx.textAlign = "center";
+				ctx.fillText(
+					"Press Space or Click to Start",
+					canvas.width / 2,
+					canvas.height / 2
+				);
+			}
+
+			// Draw the score with a background box (margin + padding)
+			function drawScore() {
+				const scoreText = "Score: " + score;
+				const maxText = "Max Score: " + maxScore;
+
+				ctx.font = "24px sans-serif";
+				ctx.textAlign = "left";
+				// Measure text widths
+				const scoreWidth = ctx.measureText(scoreText).width;
+				const maxWidth = ctx.measureText(maxText).width;
+				const boxWidth = Math.max(scoreWidth, maxWidth) + padding * 2;
+				const boxHeight = 24 * 2 + padding * 3; // two lines of text + padding
+
+				// Draw background box
+				ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+				ctx.fillRect(marginX - padding, marginY - padding, boxWidth, boxHeight);
+				ctx.strokeStyle = "#000";
+				ctx.strokeRect(
+					marginX - padding,
+					marginY - padding,
+					boxWidth,
+					boxHeight
+				);
+
+				// Draw text inside the box
+				ctx.fillStyle = "#000";
+				ctx.fillText(scoreText, marginX, marginY + 24);
+				ctx.fillText(maxText, marginX, marginY + 24 + padding + 24);
+			}
+
+			// Main game loop
+			function loop() {
+				if (gameOver) {
+					ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+					ctx.fillRect(0, 0, canvas.width, canvas.height);
+					ctx.fillStyle = "#fff";
+					ctx.font = "48px sans-serif";
+					ctx.textAlign = "center";
+					ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2 - 20);
+					restartBtn.style.display = "block";
+					return;
+				}
+
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				frameCount++;
+
+				// Calculate dynamic gap and speed based on score
+				let dynamicGap =
+					score >= maxScore - 5 ? 10 : Math.max(baseGap - score * 10, minGap);
+				let speed = 2 + score * 0.2;
+
+				// Spawn a new pipe every spawnInterval frames
+				if (frameCount % spawnInterval === 0) {
+					pipes.push(new Pipe(dynamicGap, speed));
+				}
+
+				// Draw and update each pipe, and remove off-screen pipes
+				for (let i = pipes.length - 1; i >= 0; i--) {
+					pipes[i].draw();
+					pipes[i].update();
+					if (pipes[i].x + pipeWidth < 0) {
+						pipes.splice(i, 1);
+					}
+				}
+
+				bird.update();
+				bird.draw();
+
+				// Draw score with margin and padding
+				drawScore();
+
+				requestAnimationFrame(loop);
+			}
+
+			// Handle input (Spacebar)
+			document.addEventListener("keydown", function (e) {
+				if (e.code === "Space") {
+					if (!gameStarted) {
+						gameStarted = true;
+						loop();
+					} else if (!gameOver) {
+						bird.flap();
+					}
+				}
+			});
+
+			// Handle canvas click only for flap
+			canvas.addEventListener("click", function () {
+				if (gameStarted && !gameOver) {
+					bird.flap();
+				}
+			});
+
+			// Restart button reloads the window
+			restartBtn.addEventListener("click", function () {
+				location.reload();
+			});
+
+			// Initially show start screen
+			drawStartScreen();
+		</script>
+	</body>
+</html>
